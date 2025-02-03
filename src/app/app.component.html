@@ -1,0 +1,28 @@
+<div class="app-container">
+    <mat-toolbar color="primary" class="app-header">
+        <button mat-icon-button (click)="drawer.toggle()" class="menu-button" *ngIf="isMobile">
+            <mat-icon>menu</mat-icon>
+        </button>
+        <a routerLink="/dashboard" style="text-decoration: none; color: inherit;">
+            <span>Englisch Lern App</span>
+        </a>
+        <span class="toolbar-spacer"></span>
+        <button mat-button  *ngIf="!isMobile" routerLink="/words" routerLinkActive="active">Wörterdatenbank</button>
+        <button mat-button  *ngIf="!isMobile" routerLink="/learning" routerLinkActive="active">Lernen</button>
+        <button mat-button  *ngIf="!isMobile" routerLink="/repetition" routerLinkActive="active">Wiederholen</button>
+        <button mat-button *ngIf="!isMobile" (click)="logout()" routerLinkActive="active">Logout</button>
+    </mat-toolbar>
+    <mat-drawer-container class="app-drawer-container">
+        <mat-drawer #drawer mode="side" [opened]="!isMobile" class="app-drawer">
+            <mat-nav-list>
+                <a mat-list-item routerLink="/words" (click)="drawer.close()" routerLinkActive="active">Wörterdatenbank</a>
+                <a mat-list-item routerLink="/learning" (click)="drawer.close()" routerLinkActive="active">Lernen</a>
+                <a mat-list-item routerLink="/repetition" (click)="drawer.close()" routerLinkActive="active">Wiederholen</a>
+                <mat-list-item (click)="logout(); drawer.close()" routerLinkActive="active">Logout</mat-list-item>
+            </mat-nav-list>
+        </mat-drawer>
+        <mat-drawer-content class="app-drawer-content">
+            <router-outlet></router-outlet>
+        </mat-drawer-content>
+    </mat-drawer-container>
+</div>

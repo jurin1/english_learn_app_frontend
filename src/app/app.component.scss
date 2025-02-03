@@ -1,0 +1,33 @@
+.toolbar-spacer {
+  flex: 1 1 auto;
+}
+.app-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+.app-header {
+    z-index: 2;
+}
+.app-drawer-container {
+    flex: 1;
+    display: flex;
+}
+.app-drawer {
+  width: 250px;
+}
+.app-drawer-content {
+    flex: 1;
+    padding: 20px;
+}
+.menu-button {
+  margin-right: 10px;
+}
+@media (min-width: 768px) {
+  .menu-button {
+    display: none;
+  }
+  .app-drawer {
+    display: none;
+  }
+}
