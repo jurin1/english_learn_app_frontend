@@ -4,6 +4,7 @@ import { AuthService } from '../../auth/auth.service';
 import { MatTableModule } from '@angular/material/table';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { FormBuilder } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
 
 interface Word {
   id: number;
@@ -27,21 +28,29 @@ export class WordDatabaseComponent {
   userWords: UserWord[] = [];
   displayedColumns: string[] = ['word', 'is_known'];
 
-  constructor(private authService: AuthService, private fb: FormBuilder) {}
+  constructor(
+    private authService: AuthService,
+    private fb: FormBuilder,
+    private http: HttpClient
+  ) {}
 
   ngOnInit(): void {
-    this.authService.getAllWords(6).subscribe((words) => {
+    this.authService.getAllWords().subscribe((words) => {
       this.allWords = words;
     });
+
     this.authService.getUserWords().subscribe((userWords) => {
       this.userWords = userWords;
+      console.log(userWords);
     });
   }
+
   isKnown(wordId: number): boolean {
     return !!this.userWords.find(
       (userWord) => userWord.word === wordId && userWord.is_known
     );
   }
+
   updateWord(word: Word, event: any): void {
     this.authService
       .updateUserWord(word.id, event.checked)

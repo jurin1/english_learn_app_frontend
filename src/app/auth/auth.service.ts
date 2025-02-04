@@ -78,7 +78,11 @@ export class AuthService {
         return of(JSON.parse(storedWords));
       }
     }
-    return this.http.get<Word[]>(this.allWordsUrl).pipe(
+    const token = this.getAccessToken();
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+    return this.http.get<Word[]>(this.allWordsUrl, { headers: headers }).pipe(
       tap((words) => {
         localStorage.setItem(this.allWordsKey, JSON.stringify(words));
         localStorage.setItem(this.allWordsTimestampKey, new Date().toString());
@@ -86,10 +90,18 @@ export class AuthService {
     );
   }
   getUserWords(): Observable<UserWord[]> {
-    return this.http.get<UserWord[]>(this.userWordsUrl);
+    const token = this.getAccessToken();
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+    return this.http.get<UserWord[]>(this.userWordsUrl, { headers: headers });
   }
   updateUserWord(word: number, isKnown: boolean): Observable<UserWord> {
-    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    const token = this.getAccessToken();
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    });
     return this.http.post<UserWord>(
       this.userWordsUrl,
       { word: word, is_known: isKnown },
