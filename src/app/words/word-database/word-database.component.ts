@@ -36,7 +36,7 @@ export class WordDatabaseComponent implements OnInit {
   userWords: UserWord[] = [];
   newWords: Word[] = [];
   displayedWords: Word[] = []; // Array für die aktuell angezeigten Wörter
-  displayedColumns: string[] = ['word', 'translation', 'is_known'];
+  displayedColumns: string[] = ['word', 'translation', 'is_known']; // Spalten für die Tabelle
 
   pageSize = 10; // Anzahl der Wörter pro Seite
   pageIndex = 0; // Aktuelle Seite
@@ -85,18 +85,10 @@ export class WordDatabaseComponent implements OnInit {
     );
   }
 
-  updateWord(word: Word, event: any): void {
-    this.authService
-      .updateUserWord(word.id, event.checked)
-      .subscribe((userWord) => {
-        const index = this.userWords.findIndex(
-          (userWord) => userWord.word === word.id
-        );
-        if (index !== -1) {
-          this.userWords[index] = userWord;
-        } else {
-          this.userWords.push(userWord);
-        }
-      });
+  updateWord(id: number, isKnown: boolean): void {
+    this.authService.updateUserWord(id, isKnown).subscribe(() => {
+      this.newWords = this.newWords.filter((w) => w.id !== id);
+      this.updateDisplayedWords();
+    });
   }
 }

@@ -1,29 +1,34 @@
 <mat-card>
-    <mat-card-title>Wörterdatenbank</mat-card-title>
-    <mat-card-content>
-      <table mat-table [dataSource]="displayedWords" class="mat-elevation-z8">
-        <ng-container matColumnDef="word">
-          <th mat-header-cell *matHeaderCellDef> Wort </th>
-          <td mat-cell *matCellDef="let element"> {{element.word}} </td>
-        </ng-container>        
-        <ng-container matColumnDef="translation">
-          <th mat-header-cell *matHeaderCellDef> Übersetzung </th>
-          <td mat-cell *matCellDef="let element"> {{element.translation}} </td>
-        </ng-container>
-        <ng-container matColumnDef="is_known">
-          <th mat-header-cell *matHeaderCellDef> Bekannt </th>
-          <td mat-cell *matCellDef="let element">
-           <mat-checkbox [checked]="isKnown(element.id)" (change)="updateWord(element, $event)" ></mat-checkbox>
-          </td>
-        </ng-container>
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-      </table>
-      <mat-paginator
-        [length]="totalItems"
-        [pageSize]="pageSize"
-        [pageIndex]="pageIndex"
-        aria-label="Select page">
-      </mat-paginator>
-    </mat-card-content>
+  <mat-card-title>Wörterdatenbank</mat-card-title>
+  <mat-card-content>
+    <table mat-table [dataSource]="displayedWords" class="mat-elevation-z8">
+      <ng-container matColumnDef="word">
+        <th mat-header-cell *matHeaderCellDef>Wort</th>
+        <td mat-cell *matCellDef="let element">{{ element.word }}</td>
+      </ng-container>
+      <ng-container matColumnDef="translation">
+        <th mat-header-cell *matHeaderCellDef>Übersetzung</th>
+        <td mat-cell *matCellDef="let element">{{ element.translation }}</td>
+      </ng-container>
+      <ng-container matColumnDef="is_known">
+        <th mat-header-cell *matHeaderCellDef>Bekannt?</th>
+        <td mat-cell *matCellDef="let element">
+          <button mat-button (click)="updateWord(element.id, true)">Ja</button>
+          <button mat-button (click)="updateWord(element.id, false)">
+            Nein
+          </button>
+        </td>
+      </ng-container>
+      >>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+    <mat-paginator
+      [length]="totalItems"
+      [pageSize]="pageSize"
+      [pageIndex]="pageIndex"
+      aria-label="Select page"
+    >
+    </mat-paginator>
+  </mat-card-content>
 </mat-card>
