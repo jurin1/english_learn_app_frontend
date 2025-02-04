@@ -1,3 +1,10 @@
+<div>
+  <select [(ngModel)]="selectedList" (change)="selectList(selectedList)">
+    <option *ngFor="let option of listOptions" [value]="option">
+      {{option}}
+    </option>
+  </select>
+</div>
 <mat-card>
   <mat-card-title>Wörterdatenbank</mat-card-title>
   <mat-card-content>

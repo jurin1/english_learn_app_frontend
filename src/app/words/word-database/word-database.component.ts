@@ -11,6 +11,7 @@ interface Word {
   id: number;
   word: string;
   translation: string;
+  oxford_list: string;
 }
 
 interface UserWord {
@@ -42,11 +43,15 @@ export class WordDatabaseComponent implements OnInit {
   pageIndex = 0; // Aktuelle Seite
   totalItems = 0; // Gesamtzahl der Wörter
 
+  listOptions: string[] = ['alle','Oxford_3000', 'Oxford_5000'];
+
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   constructor(private authService: AuthService) {}
+  selectedList: string = 'alle';
 
   ngOnInit(): void {
+    this.selectedList = localStorage.getItem('filter_list') || 'alle';
     this.authService.getAllWords().subscribe((words) => {
       this.allWords = words;
       this.authService.getUserWords().subscribe((userWords) => {
@@ -66,11 +71,19 @@ export class WordDatabaseComponent implements OnInit {
   }
 
   filterNewWords(): void {
-    this.newWords = this.allWords.filter((word) => {
-      return !this.userWords.some((userWord) => userWord.word === word.id);
-    });
-    this.totalItems = this.newWords.length; // Gesamtzahl der Items setzen
-    this.updateDisplayedWords(); // Die ersten Wörter anzeigen
+    let filteredWords = this.allWords.filter(
+      (word) => !this.userWords.some((userWord) => userWord.word === word.id)
+    );
+
+    if (this.selectedList !== 'alle' && this.selectedList) {
+      filteredWords = filteredWords.filter(
+        (word) => word.oxford_list === this.selectedList
+      );
+    }
+
+    this.newWords = filteredWords;
+    this.totalItems = this.newWords.length;
+    this.updateDisplayedWords();
   }
 
   updateDisplayedWords(): void {
@@ -90,5 +103,12 @@ export class WordDatabaseComponent implements OnInit {
       this.newWords = this.newWords.filter((w) => w.id !== id);
       this.updateDisplayedWords();
     });
+  }
+
+  selectList(list: string): void {
+    this.selectedList = list;
+    localStorage.setItem('filter_list', list);
+    this.pageIndex = 0;
+    this.filterNewWords();
   }
 }

@@ -11,6 +11,7 @@ interface Word {
   id: number;
   word: string;
   translation: string;
+  oxford_list: string;
 }
 
 interface UserWord {
